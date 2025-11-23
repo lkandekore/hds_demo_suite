@@ -1,0 +1,353 @@
+﻿<Window x:Class="HDS_Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HDS Diagnostics Dashboard"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="#F5F5F7"
+        MinWidth="1100"
+        MinHeight="700">
+
+    <!-- ======================= -->
+    <!--   RESOURCES             -->
+    <!-- ======================= -->
+    <Window.Resources>
+
+        <!-- Colors -->
+        <Color x:Key="CardColor">#FFFFFFFF</Color>
+        <Color x:Key="BorderColor">#D6D6D6</Color>
+        <Color x:Key="HeaderColor">#F1F3F4</Color>
+        <Color x:Key="AccentColor">#007AFF</Color>
+        <Color x:Key="AccentHover">#148CFF</Color>
+
+        <SolidColorBrush x:Key="CardBrush" Color="{StaticResource CardColor}"/>
+        <SolidColorBrush x:Key="BorderBrushLight" Color="{StaticResource BorderColor}"/>
+        <SolidColorBrush x:Key="HeaderBrush" Color="{StaticResource HeaderColor}"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+        <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHover}"/>
+
+        <!-- Shadow -->
+        <DropShadowEffect x:Key="SoftShadow"
+                          Color="#000000"
+                          BlurRadius="12"
+                          ShadowDepth="2"
+                          Opacity="0.08"/>
+
+        <!-- Card -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushLight}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect" Value="{StaticResource SoftShadow}"/>
+        </Style>
+
+        <Style x:Key="CardHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#222"/>
+            <Setter Property="Margin" Value="0 0 0 10"/>
+        </Style>
+
+        <!-- Metrics compact -->
+        <Style x:Key="MetricLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#777"/>
+        </Style>
+        <Style x:Key="MetricValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#007AFF"/>
+        </Style>
+
+        <!-- GHOST BUTTON (B2) -->
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#007AFF"/>
+            <Setter Property="BorderBrush" Value="#007AFF"/>
+            <Setter Property="BorderThickness" Value="1.4"/>
+            <Setter Property="Padding" Value="10 6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource AccentHoverBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource AccentHoverBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Fluent DataGrid (Light Header) -->
+        <Style x:Key="TelemetryGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrushLight}"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="ColumnHeaderHeight" Value="34"/>
+            <Setter Property="RowHeight" Value="26"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="AlternatingRowBackground" Value="#F7F7F7"/>
+
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{StaticResource HeaderBrush}"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Padding" Value="6"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+
+    <!-- ======================= -->
+    <!-- MAIN GRID (40 / 60) -->
+    <!-- ======================= -->
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="70*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <!-- ======================= -->
+        <!-- LEFT COLUMN -->
+        <!-- ======================= -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- METRICS (compact) -->
+            <Border Style="{StaticResource Card}" Grid.Row="0">
+                <UniformGrid Columns="4" Rows="2">
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Faults" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding FaultCount}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="CPU" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding CpuUsage}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="RAM" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding RamUsage}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="GPU" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding GpuUsage}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Disk I/O" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding DiskIo}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="Network" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding NetUsage}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="PCAP" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding PcapStatus}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock Text="DLT" Style="{StaticResource MetricLabel}"/>
+                        <TextBlock Text="{Binding PcapStatus}" Style="{StaticResource MetricValue}" FontSize="18"/>
+                    </StackPanel>
+                </UniformGrid>
+            </Border>
+
+
+
+
+            <!-- TOP PROCESSES + REGISTERED APPS -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60*"/>
+                    <RowDefinition Height="45*"/>
+                </Grid.RowDefinitions>
+
+                <!-- TOP PROCESSES -->
+                <Border Style="{StaticResource Card}" Grid.Row="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Top Processes" Style="{StaticResource CardHeader}" Grid.Row="0" Foreground="#007AFF"/>
+
+                        <DataGrid ItemsSource="{Binding TopProcesses}"
+                                  AutoGenerateColumns="False"
+                                  Style="{StaticResource TelemetryGrid}"
+                                  Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="PID" Binding="{Binding Pid}" Width="60"/>
+                                <DataGridTextColumn Header="Process" Binding="{Binding Name}" Width="180"/>
+                                <DataGridTextColumn Header="RAM (MB)" Binding="{Binding RamMB}" Width="100"/>
+                                <DataGridTextColumn Header="Threads" Binding="{Binding Threads}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!-- REGISTERED APPS -->
+                <Border Style="{StaticResource Card}" Grid.Row="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Registered Applications" Style="{StaticResource CardHeader}" Grid.Row="0" Foreground="#007AFF"/>
+
+                        <DataGrid ItemsSource="{Binding RegisteredApps}"
+                                  AutoGenerateColumns="False"
+                                  Style="{StaticResource TelemetryGrid}"
+                                  Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="App" Binding="{Binding Application}" Width="120"/>
+                                <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="65"/>
+                                <DataGridTextColumn Header="ID" Binding="{Binding RegistrationId}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+
+
+
+        <!-- ======================= -->
+        <!-- RIGHT COLUMN -->
+        <!-- ======================= -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Fault Summary -->
+                <RowDefinition Height="60*"/>
+                <!-- Event Log -->
+                <RowDefinition Height="40*"/>
+                <!-- Diagnostic Packages -->
+            </Grid.RowDefinitions>
+
+
+            <!-- FAULT SUMMARY -->
+            <Border Style="{StaticResource Card}" Grid.Row="0" Height="250">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Fault Summary" Style="{StaticResource CardHeader}" Grid.Row="0" Foreground="#007AFF"/>
+
+                    <DataGrid ItemsSource="{Binding FaultSummary}"
+                              AutoGenerateColumns="False"
+                              Style="{StaticResource TelemetryGrid}"
+                              Grid.Row="1"
+                              FontSize="10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Application" Binding="{Binding ApplicationName}" Width="80"/>
+                            <DataGridTextColumn Header="Code" Binding="{Binding FaultCode}" Width="40"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="40"/>
+                            <DataGridTextColumn Header="Severity" Binding="{Binding Severity}" Width="80"/>
+                            <DataGridTextColumn Header="Type Description" Binding="{Binding TypeDescription}" Width="200"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="280"/>
+                            <DataGridTextColumn Header="Count" Binding="{Binding Count}" Width="60"/>
+                            <DataGridTextColumn Header="Last Seen" Binding="{Binding LastTimestamp}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+
+
+
+            <!-- EVENT LOG (60%) -->
+            <Border Style="{StaticResource Card}" Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Event Log" Style="{StaticResource CardHeader}" Grid.Row="0" Foreground="#007AFF"/>
+
+                    <ListBox ItemsSource="{Binding EventLog}"
+                             Background="White"
+                             Padding="6"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             Grid.Row="1"
+                             FontFamily="Consolas"
+                             FontSize="11"/>
+                </Grid>
+            </Border>
+
+
+
+
+            <!-- DIAGNOSTIC PACKAGES (40%) -->
+            <Border Style="{StaticResource Card}" Grid.Row="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- BEAUTIFUL GHOST BUTTON (B2) -->
+                    
+                    <TextBlock Text="Diagnostic Packages"
+                               Style="{StaticResource CardHeader}"
+                               Grid.Row="0"
+                               Foreground="#007AFF"/>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ListBox ItemsSource="{Binding Packages}"
+                                 Name="PackageList"
+                                 Background="White"
+                                 FontFamily="Consolas"
+                                 MouseDoubleClick="OnPackageDoubleClick"/>
+                    </ScrollViewer>
+                    <StackPanel
+                        HorizontalAlignment="Right"
+                        Margin="0 0 0 0">
+                        <Button Content="Open Folder"
+                        Style="{StaticResource GhostButton}"
+                        Click="OnOpenPackageFolder"
+                        Width="100"
+                        Height="25"/>
+                    </StackPanel>
+                </Grid>
+                
+            </Border>
+        </Grid>
+
+    </Grid>
+
+</Window>

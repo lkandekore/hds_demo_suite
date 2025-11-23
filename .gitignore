@@ -1,0 +1,67 @@
+##########################################
+# GLOBAL IGNORE FOR ENTIRE HDS SUITE
+##########################################
+
+# Logs
+*.log
+*.tmp
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# IDE junk
+.vscode/
+.idea/
+*.sln.cache
+*.user
+*.suo
+
+##########################################
+# C# / .NET
+##########################################
+
+# Visual Studio
+.vs/
+*.user
+*.rsuser
+*.suo
+*.cache
+*.pdb
+*.mdb
+
+# Build artifacts
+bin/
+obj/
+Generated\ Files/
+TestResults/
+
+# NuGet
+*.nupkg
+packages/
+
+##########################################
+# Rust
+##########################################
+
+# Rust build output
+target/
+**/target/
+**/*.rs.bk
+
+##########################################
+# ASP.NET server
+##########################################
+
+*.db
+*.sqlite
+*.sqlite3
+
+##########################################
+# Misc
+##########################################
+
+*.bak
+*.old
+*.orig
+*.tmp
