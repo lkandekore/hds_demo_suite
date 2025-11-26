@@ -1,0 +1,1827 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Definition of ASAM SOVD API",
+    "version" : "1.0.0",
+    "title" : "Service-Oriented Vehicle Diagnostic API",
+    "contact" : {
+      "url" : "https://www.asam.net/project-detail/sovd-service-oriented-vehicle-diagnostics/"
+    }
+  },
+  "tags" : [ {
+    "name" : "data-retrieval",
+    "description" : "Methods for data resource read / write access"
+  }, {
+    "name" : "configurations",
+    "description" : "Methods for configuration"
+  }, {
+    "name" : "bulk-data",
+    "description" : "Methods for handling of bulk-data"
+  }, {
+    "name" : "logging",
+    "description" : "Methods for logging"
+  }, {
+    "name" : "locking",
+    "description" : "Methods for locking"
+  }, {
+    "name" : "capabilities",
+    "description" : "Methods for access to capability description content"
+  }, {
+    "name" : "fault-handling",
+    "description" : "Methods for fault handling"
+  }, {
+    "name" : "updates",
+    "description" : "Methods for software updates"
+  }, {
+    "name" : "discovery",
+    "description" : "Methods for discovering of entities and resources"
+  }, {
+    "name" : "operations-control",
+    "description" : "Methods for control of operations"
+  }, {
+    "name" : "target-modes",
+    "description" : "Methods for support of target modes"
+  } ],
+  "paths" : {
+    "/{entity-collection}" : {
+      "get" : {
+        "tags" : [ "discovery" ],
+        "description" : "This method provides the list of contained entities for each requested entity collection",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Discover contained entities of entity collections"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/areas/{area-id}/subareas" : {
+      "get" : {
+        "tags" : [ "discovery" ],
+        "description" : "This method provides the list of sub-entities for each Area.",
+        "parameters" : [ {
+          "name" : "area-id",
+          "in" : "path",
+          "description" : "Id of an requested area",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Discover contained entities of entity collections"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/components/{component-id}/subcomponents" : {
+      "get" : {
+        "tags" : [ "discovery" ],
+        "description" : "This method provides the list of sub-entities for each Component.",
+        "parameters" : [ {
+          "name" : "component-id",
+          "in" : "path",
+          "description" : "Id of an requested component",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Discover contained entities of entity collections"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/components/{component-id}/related-apps" : {
+      "get" : {
+        "tags" : [ "discovery" ],
+        "description" : "This method provides the list of related app present on a component",
+        "parameters" : [ {
+          "name" : "component-id",
+          "in" : "path",
+          "description" : "Id of an requested component",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Discover contained entities of entity collections"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}" : {
+      "get" : {
+        "tags" : [ "discovery" ],
+        "description" : "This method returns the capabilities of an entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The response body contains a property for each supported resource and related collection."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/authorize" : {
+      "$ref" : "#/paths/~1authorize"
+    },
+    "/token" : {
+      "$ref" : "#/paths/~1token"
+    },
+    "/{entity-collection}/{entity-id}/bulk-data" : {
+      "get" : {
+        "tags" : [ "bulk-data" ],
+        "description" : "This method provides the list of bulk data categories supported by an entity. The result contains all available and based on the authorization accesible bulk data categories. Certain bulk data categories are hidden based on the user’s authorization.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Retrieve list of all bulk data categories"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/bulk-data/{category}" : {
+      "get" : {
+        "tags" : [ "bulk-data" ],
+        "description" : "This method provides the list of BulkDataDescriptors for a specific category available and accessible for an SOVD client. The possible categories can be retrieved either using the interactive capability description method Retrieve List of all Bulk Data Categories or the offline capability description.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "category",
+          "in" : "path",
+          "description" : "The category represents a logical grouping of bulk data exposed by the SOVD server implementation, e.g., POIs stored on a navigation unit.",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response body - Read bulk data meta data"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "bulk-data" ],
+        "description" : "This method uploads bulk data to the SOVD server and creates a resource for the bulk data. The request provides the content as well as any additional information, e.g., security artifacts, which are required to validate the content.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "category",
+          "in" : "path",
+          "description" : "The category represents a logical grouping of bulk data exposed by the SOVD server implementation, e.g., POIs stored on a navigation unit.",
+          "required" : true
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "Depends on Request Body",
+          "required" : true
+        }, {
+          "name" : "Content-Length",
+          "in" : "header",
+          "description" : "Size of the content",
+          "required" : true
+        }, {
+          "name" : "Content-Disposition",
+          "in" : "header",
+          "description" : "Provides more information on the content and shall at least have the attribute name to give the SOVD server a hint on what is meant specifically. In addition, the attribute filename may be set to propose a file name in case the bulk data is stored on the file system. However, an SOVD server may also discard the proposed file name.",
+          "required" : true
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Response body - Upload bulk data",
+            "headers" : {
+              "Location" : {
+                "description" : "The response includes the following header to redirect the SOVD client to the created bulk data resource: Location: /{entity-path}/bulk-data/{category}/{bulk-data-id}"
+              }
+            }
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "bulk-data" ],
+        "description" : "This method requests the deletion of all bulk data for the given category.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "category",
+          "in" : "path",
+          "description" : "The category represents a logical grouping of bulk data exposed by the SOVD server implementation, e.g., POIs stored on a navigation unit.",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response body - Delete all bulk data defined by category"
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/bulk-data/{category}/{bulk-data-id}" : {
+      "get" : {
+        "tags" : [ "bulk-data" ],
+        "description" : "This method downloads the bulk data identified by bulk-data-id and category from the SOVD server. The SOVD server manages how bulk-data-id and category are mapped to the underlying data storage and how the retrieval of the bulk data based on the identifier is performed. The method allows the transfer of a single bulk data.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "category",
+          "in" : "path",
+          "description" : "The category represents a logical grouping of bulk data exposed by the SOVD server implementation, e.g., POIs stored on a navigation unit.",
+          "required" : true
+        }, {
+          "name" : "bulk-data-id",
+          "in" : "path",
+          "description" : "Bulk data identifier",
+          "required" : true
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "description" : "This method does not require any request headers. However, if an SOVD client requires a proof-of-origin, the Accept header has to be set with the value multipart/signed. The SOVD server will then sign the transferred data and set Content-Type header to multipart/signed instead of multipart/form-data. OEMs may, alternatively, decide to use multipart/form-data and include the security artefacts within the application/json part using OEM specific formats.",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response body - Download bulk data"
+          },
+          "202" : {
+            "description" : "The SOVD server accepted the request, but the data is not yet ready for retrieval. The SOVD client has to retry the request later on. An SOVD server may use the response header field Retry-After to inform the SOVD client after how many seconds a retry is reasonable.",
+            "headers" : {
+              "Retry-After" : { }
+            }
+          },
+          "307" : {
+            "description" : "Temporary Redirect The URI is provided using the Location response header.",
+            "headers" : {
+              "Location" : { }
+            }
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "bulk-data" ],
+        "description" : "This method requests the deletion of a specific bulk data resource of the given category.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "category",
+          "in" : "path",
+          "description" : "The category represents a logical grouping of bulk data exposed by the SOVD server implementation, e.g., POIs stored on a navigation unit.",
+          "required" : true
+        }, {
+          "name" : "bulk-data-id",
+          "in" : "path",
+          "description" : "Bulk data identifier",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{any-path}/docs" : {
+      "get" : {
+        "tags" : [ "capabilities" ],
+        "description" : "For entities, resources, and resource collections, a corresponding online capability description can be requested at the SOVD API. The resulting online capability description is a self-contained, valid OpenAPI specification. The description contains information which refers to the creation, reading, updating or deleting of the respective element and its direct child elements as defined by the SOVD standard. An online capability description is requested for a data resource /{entity-path}/data/{data-id} via GET /{entity-path}/data/{data-id}/docs. For example, to enrich the responses with additional details such as the underlying schema of the response using the “include-schema” query parameter on the request. Moreover, for each supported HTTP method all defined HTTP response status codes are documented together with the data model of the resulting response payloads.",
+        "parameters" : [ {
+          "name" : "any-path",
+          "in" : "path",
+          "description" : "Path to entity, resource or resource collection for which to request the online capability description.",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The online capability description of the underlying resource in form of an OpenAPI specification in JSON document format."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/configurations" : {
+      "get" : {
+        "tags" : [ "configurations" ],
+        "description" : "Provides the configurations provided by an entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Retrieve list of all configurations provided by the entity."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/configurations/{configuration-id}" : {
+      "get" : {
+        "tags" : [ "configurations" ],
+        "description" : "This method is used to read a configuration from an entity, which can either be * bulk data or * parameter data (MIME type: application/json) The SOVD standard follows the server-driven content negotiation where the client defines its preferences using the Accept request header. If no Accept request header is provided, the SOVD server returns a default representation.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "configuration-id",
+          "in" : "path",
+          "description" : "The identifier for the configuration",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Read Configurations"
+          },
+          "406" : {
+            "description" : "bulk data: The configuration cannot be provided in the requested MIME type. parameter data: The configuration cannot be provided as parameter data, i.e., the configuration cannot be provided as JSON."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "configurations" ],
+        "description" : "This method is used to write a configuration to an entity, which can either be • bulk data, or • parameter data (MIME type: application/json) The SOVD client shall tell the SOVD server in the Content-Type header, which MIME type is written to it.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "configuration-id",
+          "in" : "path",
+          "description" : "The identifier for the configuration",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Configuration written."
+          },
+          "400" : {
+            "description" : "The request body does either not contain all required parameter values or the signature for the provided values is wrong."
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/data-categories" : {
+      "get" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method returns the data categories provided by an entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Data categories provided by an entity."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/data-groups" : {
+      "get" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method provides the groups defined for an entity. Groups are associated with a category. The concept of groups is not intended to be used for partitioning data from different subcomponents, e.g., LIN slaves should be mapped to subcomponents of the master ECU and are thus accessible using a URI like components/master/subcomponents/lin-slave.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Retrieve groups supported by a data resource collection."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/data" : {
+      "get" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method provides the list of all data resources available for an entity. The returned data may be filtered by their category (e.g., to limit the list to current data values) or by their group identifiers.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "groups",
+          "in" : "query",
+          "description" : "Filters the available elements based on the group they belong to. If an element belongs to multiple groups, it is included if the group is part of these multiple groups.",
+          "required" : false
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Filters the available elements based on their category",
+          "required" : false
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Retrieve list of all data provided by the entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/data/{data-id}" : {
+      "get" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method retrieves the value of a single data resource, like VIN, battery voltage, or CPU load. The response includes all values associated with the resource and cannot be filtered down to individual attributes of the resource.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "data-id",
+          "in" : "path",
+          "description" : "The identifier for the data resource",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Read single data value from an entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method writes the value of a data resource of an entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "data-id",
+          "in" : "path",
+          "description" : "The identifier for the data resource",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Data written."
+          },
+          "400" : {
+            "description" : "The request body does either not contain all required parameter values or the signature for the provided values is wrong."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/data-lists" : {
+      "get" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "Provides the list of all data-lists resources available for an entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Retrieve list of all data-lists provided by the entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method creates a temporary resource for reading multiple data resources with one request from an entity. The identifiers of the requested data resources of the given entity shall be listed in the request body. The SOVD API does not impose any restrictions on the category or group of the identifier, especially identifiers from different groups and categories maybe mixed. The resource has to be deleted explicitly by the SOVD client. If the SOVD client does not delete the resource, the SOVD server can delete it after a certain period if the resource is not used anymore or upon SOVD server restart.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Response: Creating a data list for reading multiple data values at once from an entity",
+            "headers" : {
+              "Location" : {
+                "description" : "Redirect the SOVD client to reading the resource for requesting the values."
+              }
+            }
+          },
+          "400" : {
+            "description" : "An unexpected request occurred"
+          },
+          "501" : {
+            "description" : "The SOVD server does not support the creation of data list resources"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/data-lists/{data-list-id}" : {
+      "get" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method returns the values defined by the given data list.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "data-list-id",
+          "in" : "path",
+          "description" : "The identifier for the data-list resource",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Read multiple data values at once from an entity using a data list"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "data-retrieval" ],
+        "description" : "This method removes the temporarily defined data list.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "data-list-id",
+          "in" : "path",
+          "description" : "The identifier for the data-list resource",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/faults" : {
+      "get" : {
+        "tags" : [ "fault-handling" ],
+        "description" : "This method provides the fault entries which are detected for an entity, if no query parameter is used. The returned fault entries may be filtered by their status.",
+        "operationId" : "getFaults",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        }, {
+          "name" : "status[key]",
+          "in" : "query",
+          "description" : "Filters the available elements based on a key from the status. The provided value is a full match against the key and value of the attribute status in the response. For filtering by multiple status, the parameter is repeated (0 .. *). If multiple status are provided, they are logically OR combined. The keys supported by an entity are defined in the capability description of the entity.",
+          "required" : false
+        }, {
+          "name" : "severity",
+          "in" : "query",
+          "description" : "Filter fault entries by their severity. Any fault with a severity below the given number will be included in the response.",
+          "required" : false
+        }, {
+          "name" : "scope",
+          "in" : "query",
+          "description" : "The scope (e.g. user-defined error memories) for which faults are retrieved. The capability description defines which scopes are supported.",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Retrieve list of all faults provided by the entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "fault-handling" ],
+        "description" : "This method deletes all fault entries of an entity.",
+        "operationId" : "deleteAllFaults",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "scope",
+          "in" : "query",
+          "description" : "The scope (e.g. user-defined error memories) for which faults are retrieved. The capability description defines which scopes are supported.",
+          "required" : false
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/faults/{fault-code}" : {
+      "get" : {
+        "tags" : [ "fault-handling" ],
+        "description" : "This method provides the details for a fault-code.",
+        "operationId" : "getFaultById",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "fault-code",
+          "in" : "path",
+          "description" : "The scope (e.g. user-defined error memories) for which faults are retrieved. The capability description defines which scopes are supported.",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Provide the details for a fault-code."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "fault-handling" ],
+        "description" : "This method deletes the given fault entry from an entity.",
+        "operationId" : "deleteFaultById",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "fault-code",
+          "in" : "path",
+          "description" : "The scope (e.g. user-defined error memories) for which faults are retrieved. The capability description defines which scopes are supported.",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Fault entry has been deleted successfully."
+          },
+          "404" : {
+            "description" : "The SOVD client tried to delete a fault entry which is not defined for the entity."
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "501" : {
+            "description" : "The request for deleting single fault entries is not supported by the entity."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/locks" : {
+      "get" : {
+        "tags" : [ "locking" ],
+        "description" : "The method returns the acquired locks for the given entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Collection of Locks acquired for the entity."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "locking" ],
+        "description" : "This method acquires a lock from the SOVD server for the given entity to reserve its resources for exclusive access of a single SOVD client, i.e., prevent other SOVD clients from operating on the resources in parallel. Any further requests against the SOVD API towards controlling an operation (actuators, routines, and input control), e.g., start the execution of an operation, is rejected by the SOVD server if the required lock is not acquired by the same SOVD client. Once the lock is not required anymore, the SOVD client can delete the created lock resource by a corresponding DELETE request. In addition, an SOVD client shall provide a relative expiration time after which the SOVD server should release the lock automatically. The SOVD server might reject the requested expiration time if it is too long. As a result, the SOVD server deletes the corresponding lock resource.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Response body - Acquire a lock on an entity",
+            "headers" : {
+              "Location" : {
+                "example" : "https://sovd.server/v1/components/PowerSteering/locks/15c3e824-8278-44e1-b0b2-3bc16e4522f2",
+                "description" : "The following header redirects the SOVD client for requesting the status: Location: /{entity-path}/locks/{lock-id}"
+              }
+            }
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/locks/{lock-id}" : {
+      "get" : {
+        "tags" : [ "locking" ],
+        "description" : "The method returns all the details on the specified lock of the given entity. For extending the expiration of a lock the method described in 6.11.5 has to be invoked.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "lock-id",
+          "in" : "path",
+          "description" : "The resource identifier of the lock resource.",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Get a single active lock of an entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "locking" ],
+        "description" : "This method extends an acquired lock by providing a new expiration time. The extension is only valid for the SOVD client that has already acquired the corresponding lock.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "lock-id",
+          "in" : "path",
+          "description" : "The resource identifier of the lock resource.",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "locking" ],
+        "description" : "This method releases an acquired lock by deleting the created lock resource.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "lock-id",
+          "in" : "path",
+          "description" : "The resource identifier of the lock resource.",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/logs/entries" : {
+      "get" : {
+        "tags" : [ "logging" ],
+        "description" : "This method provides the log information aggregated by that entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "severity",
+          "in" : "query",
+          "required" : false
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Retrieve list of all log information"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/logs/config" : {
+      "get" : {
+        "tags" : [ "logging" ],
+        "description" : "This method returns an array of configured SOVD LogConfiguration elements, specifying the different contexts for which a specific log configuration was created with the method Configure SOVD Logging.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response Body - Retrieve the current SOVD logging configuration"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "logging" ],
+        "description" : "This method configures the log aggregation.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The configuration was accepted."
+          },
+          "400" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "logging" ],
+        "description" : "This method resets the current configuration to its default.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Configuration has been reset successfully."
+          },
+          "404" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/modes" : {
+      "get" : {
+        "tags" : [ "target-modes" ],
+        "description" : "This method returns all available modes defined for the given entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Retrieve list of all supported modes of an entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/modes/{mode-id}" : {
+      "get" : {
+        "tags" : [ "target-modes" ],
+        "description" : "This method returns all the details on the specified mode of the given entity",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "mode-id",
+          "in" : "path",
+          "description" : "The identifier of a mode of an entity.",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Get details of a single mode of an entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "target-modes" ],
+        "description" : "The method allows to control the state of the specified mode of the given entity explicitly.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "mode-id",
+          "in" : "path",
+          "description" : "The identifier of a mode of an entity.",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Get details of a single mode of an entity"
+          },
+          "500" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/operations" : {
+      "get" : {
+        "tags" : [ "operations-control" ],
+        "description" : "This method returns all available operations defined for the given entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "include-proximity-proof",
+          "in" : "query",
+          "description" : "Specifies whether operations which require a proximity proof are returned or not. The default is true.",
+          "required" : false
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Retrieve list of all available operations from an entity"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/operations/{operation-id}" : {
+      "get" : {
+        "tags" : [ "operations-control" ],
+        "description" : "This method returns all the details on the specified operation of the given entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "operation-id",
+          "in" : "path",
+          "description" : "Identifier for the operation",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Get details of single operation"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        },
+        "x-sovd-asynchronous-execution" : true
+      }
+    },
+    "/{entity-collection}/{entity-id}/operations/{operation-id}/executions" : {
+      "get" : {
+        "tags" : [ "operations-control" ],
+        "description" : "This method returns currently existing executions of the given operation.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "operation-id",
+          "in" : "path",
+          "description" : "Identifier for the operation",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Get executions of an operation"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "operations-control" ],
+        "description" : "Start Execution of an Operation An operation may support multiple executions in parallel. If this is not supported, this method will return an error if an operation with the same operation-id is already being executed. A successfully started operation is added to the executions collection if it is executed asynchronously. After the asynchronous execution has been finished, the execution resource remains existent and an SOVD client can receive the status. However, the status of the execution cannot be queried indefinitely as an SOVD server implementation may remove the resource, e.g., upon SOVD server restart.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "operation-id",
+          "in" : "path",
+          "description" : "Identifier for the operation",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Read Configurations"
+          },
+          "202" : {
+            "description" : "Response: Start execution of an operation - asynchronous execution",
+            "headers" : {
+              "Location" : {
+                "description" : "The response for status code 202 includes the following header to redirect the SOVD client for requesting the status: Location: /{entity-path}/operations/{operation-id}/executions/{execution-id}"
+              }
+            }
+          },
+          "409" : {
+            "description" : "An unexpected request occurred"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/operations/{operation-id}/executions/{execution-id}" : {
+      "get" : {
+        "tags" : [ "operations-control" ],
+        "description" : "This method returns the current status of the operation execution.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "operation-id",
+          "in" : "path",
+          "description" : "Identifier for the operation",
+          "required" : true
+        }, {
+          "name" : "execution-id",
+          "in" : "path",
+          "description" : "Identifier for the operation execution",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Response: Get the status of an operation execution"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "operations-control" ],
+        "description" : "This method executes the given capability on the provided operation.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "operation-id",
+          "in" : "path",
+          "description" : "Identifier for the operation",
+          "required" : true
+        }, {
+          "name" : "execution-id",
+          "in" : "path",
+          "description" : "Identifier for the operation execution",
+          "required" : true
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Response: Start execution of an operation - asynchronous execution",
+            "headers" : {
+              "Location" : {
+                "description" : "The response for status code 202 includes the following header to redirect the SOVD client for requesting the status: Location: /{entity-path}/operations/{operation-id}/executions/{execution-id}"
+              }
+            }
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        },
+        "x-sovd-capabilities" : [ "execute", "freeze", "reset" ]
+      },
+      "delete" : {
+        "tags" : [ "operations-control" ],
+        "description" : "This method terminates the execution of the operation and removes it, and the status of the operation can no longer be requested.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "operation-id",
+          "in" : "path",
+          "description" : "Identifier for the operation",
+          "required" : true
+        }, {
+          "name" : "execution-id",
+          "in" : "path",
+          "description" : "Identifier for the operation execution",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/updates/{update-package-id}/automated" : {
+      "put" : {
+        "tags" : [ "updates" ],
+        "description" : "The method starts the automated installation of the update package. For this scenario, the SOVD server and the OEM’s backend have full control over the update process and decide which action can be taken when. The method returns immediately and redirects the SOVD client to a method for requesting the status and progress of the installation.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "update-package-id",
+          "in" : "path",
+          "description" : "Identifier for the update package",
+          "required" : true
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Update package identifier",
+            "headers" : {
+              "Location" : {
+                "description" : "The URI to the newly created example. <br> /{entity-path}/updates/{update-package-id}/status"
+              }
+            }
+          },
+          "409" : {
+            "description" : "An update is already in installation and not yet done or aborted."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/updates/{update-package-id}/execute" : {
+      "put" : {
+        "tags" : [ "updates" ],
+        "description" : "The method starts the installation and activation of the update package. As part of this step the following tasks are performed for example:\n  - Validation if the update package is still installable (e.g., checking the software versions of the updated entities)\n  - Installation of the update on all updated entities\n  - Configuration of the entities\n  - Execution of specific post install actions\n  - Activation of the update (e.g., by switching to B-memory)\n  - Rollback of update in case of an error\n\nThe method returns immediately and redirects the SOVD client to a method for requesting the status and progress of the installation. After the update has been finished, the resource for the update package (and its sub-resources like status) remains existent and an SOVD client can receive the status of an update package. However, the status of the update package cannot be queried indefinitely as an SOVD server implementation may remove the update package resource, e.g., upon SOVD server restart or the retrieval of new update packages.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "update-package-id",
+          "in" : "path",
+          "description" : "Identifier for the update package",
+          "required" : true
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Update package identifier",
+            "headers" : {
+              "Location" : {
+                "description" : "The URI to the newly created example. <br> /{entity-path}/updates/{update-package-id}/status"
+              }
+            }
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/updates" : {
+      "get" : {
+        "tags" : [ "updates" ],
+        "description" : "The method returns the available updates for the entity.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "target-version",
+          "in" : "query",
+          "description" : "Defines the version which is requested by the SOVD client. This version can be a specific version or a version pattern.",
+          "required" : false
+        }, {
+          "name" : "origin",
+          "in" : "query",
+          "description" : "Defines from where the update is requested, e.g., inside a workshop or by an OTA update request. Default: remote",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Update package identifier"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/updates/{update-package-id}/prepare" : {
+      "put" : {
+        "tags" : [ "updates" ],
+        "description" : "The method starts the preparation of the update package for installation. As part of this step the following tasks are performed for example:\n  - Validates if the update package is still installable (e.g., checking the software versions of the affected entities)\n  - Download of update package from OTA backend\n  - Validation of the integrity of update package\n  - Applying deltas\n  - Installing the update in B-memory\n\nThe method returns immediately and redirects the SOVD client to a method for requesting the status and progress of the preparation. An SOVD server may remove prepared updates after an OEM defined amount of time. An explicit removal of a prepared update by an SOVD client is not provided by the SOVD API as the update is implicitly removed after installation. If an update fails, it is in general not implicitly removed as the prepared package may be used for anoth",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "update-package-id",
+          "in" : "path",
+          "description" : "Identifier for the update package",
+          "required" : true
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Update package identifier",
+            "headers" : {
+              "Location" : {
+                "description" : "The URI to the newly created example. <br> /{entity-path}/updates/{update-package-id}/status"
+              }
+            }
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/updates/{update-package-id}/status" : {
+      "get" : {
+        "tags" : [ "updates" ],
+        "description" : "The method returns the status of the preparation or execution of the update.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "update-package-id",
+          "in" : "path",
+          "description" : "Identifier for the update package",
+          "required" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Update package identifier"
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/{entity-collection}/{entity-id}/updates/{update-package-id}" : {
+      "get" : {
+        "tags" : [ "updates" ],
+        "description" : "The method returns detailed information for a given update package.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "update-package-id",
+          "in" : "path",
+          "description" : "Identifier for the update package",
+          "required" : true
+        }, {
+          "name" : "include-schema",
+          "in" : "query",
+          "description" : "Specifies whether the response should include schema information or not. Default: false",
+          "required" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request was successful."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "updates" ],
+        "description" : "The method deletes an update package from SOVD server. The resource is afterwards not available anymore.",
+        "parameters" : [ {
+          "name" : "entity-collection",
+          "in" : "path",
+          "description" : "Path to an entity collection",
+          "required" : true
+        }, {
+          "name" : "entity-id",
+          "in" : "path",
+          "description" : "ID of an entity",
+          "required" : true
+        }, {
+          "name" : "update-package-id",
+          "in" : "path",
+          "description" : "Identifier for the update package",
+          "required" : true
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "The request was successful."
+          },
+          "405" : {
+            "description" : "Deleting is not foreseen for an autonomous update-package-id."
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    },
+    "/updates" : {
+      "post" : {
+        "tags" : [ "updates" ],
+        "description" : "The method registers a new update at the SOVD server which can be installed afterwards. After creating the update, the SOVD client has to use the methods described before for installing the update (automated or prepare & execute).",
+        "parameters" : [ {
+          "name" : "Content-Type",
+          "in" : "header",
+          "description" : "OEM-specific",
+          "required" : false
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The request was successful.",
+            "headers" : {
+              "Location" : {
+                "description" : "The URI to the newly created example. <br> /{entity-path}/updates/{update-package-id}/status"
+              }
+            }
+          },
+          "default" : {
+            "description" : "An unexpected request occurred"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : { }
+}
