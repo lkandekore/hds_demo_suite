@@ -108,34 +108,49 @@ namespace HDS_Demo
 
         public void TriggerFault(FaultSignature fault, FaultRegistry registry)
         {
+            // Log capture request (UI thread)
             Log($"Time Series Slice Request:\n{JsonConvert.SerializeObject(fault.CaptureRequest, Formatting.Indented)}");
 
-
+            // Heavy work runs off-UI-thread
             Task.Run(() =>
             {
-                // 1. Generate package (heavy)
+                // =======================================================
+                // 1. Generate the diagnostic package
+                // =======================================================
                 string packageFile = GeneratePackage(fault);
 
-                // 2. Build summary off-thread
+                // Attach the package filename to the fault object   ⭐ REQUIRED
+                if (packageFile != "ERROR")
+                    fault.PackageFile = packageFile;
+
+                // =======================================================
+                // 2. Refresh summary list off the UI thread
+                // =======================================================
                 var summaryList = registry
                     .GetAll()
                     .OrderByDescending(f => f.LastTimestamp)
                     .ToList();
 
-                // 3. Apply ALL UI updates in one dispatcher call
+                // =======================================================
+                // 3. Apply all UI updates in a single atomic dispatcher call
+                // =======================================================
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    if (packageFile != "ERROR")
-                        Packages.Add(packageFile);
+                    // Add package to UI list only if valid
+                    if (fault.PackageFile != null)
+                        Packages.Add(fault.PackageFile);
 
+                    // Update summary
                     FaultSummary.Clear();
                     foreach (var f in summaryList)
                         FaultSummary.Add(f);
 
+                    // Raise FaultCount changed
                     Notify(nameof(FaultCount));
                 });
             });
         }
+
 
         // ============================================================
         // Fault Summary refresh (external use also)
@@ -300,7 +315,7 @@ namespace HDS_Demo
                         {
                             Application = a["application"]?.ToString(),
                             Version = a["version"]?.ToString(),
-                            RegistrationId = a["registration_id"]?.ToString(),   // <---- FIX
+                            RegistrationId = a["registration_id"]?.ToString(),  
                             Registered = a["registered"]?.ToString(),
                             LastSeen = a["last_seen"]?.ToString(),
                             Online = true
@@ -313,74 +328,97 @@ namespace HDS_Demo
         }
 
         // ============================================================
-        // Package Generation (HEAVY WORK)
+        // Package Generation (Final Improved Version)
         // ============================================================
 
         public string GeneratePackage(FaultSignature fault)
         {
             try
             {
-                // 1. Heavy work FIRST (no folders touched)
+                // =======================================================
+                // 1. Heavy Work First — Build time-series data
+                // =======================================================
                 fault.TimeSeries = TimeSeriesBuilder.Build(fault.CaptureRequest);
 
-                string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DiagnosticsPackages");
+                // =======================================================
+                // 2. Prepare output paths
+                // =======================================================
+                string baseDir = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "DiagnosticsPackages");
+
                 Directory.CreateDirectory(baseDir);
 
-                //string safeApp = AppInfo.ApplicationName.Replace(" ", "_");
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                 string folderName = $"pkg_{fault.ApplicationName}_{fault.FaultCode}_{timestamp}";
-                string folder = Path.Combine(baseDir, folderName);
-
-                Directory.CreateDirectory(folder);
-
+                string workFolder = Path.Combine(baseDir, folderName);
                 string zipPath = Path.Combine(baseDir, folderName + ".zip");
 
-                // 2. Create all package content
-                CreateMockFiles(folder);
-                CreateEventLogSnapshot(folder);
-                CreateTextReport(folder, fault);
-                CreateJsonReport(folder, fault);
+                Directory.CreateDirectory(workFolder);
 
-                // 3. ZIP (blocking)
-                System.IO.Compression.ZipFile.CreateFromDirectory(folder, zipPath);
+                // =======================================================
+                // 3. Create package content into temp working folder
+                // =======================================================
+                CreateMockFiles(workFolder);
+                CreateEventLogSnapshot(workFolder);
+                CreateTextReport(workFolder, fault);
+                CreateJsonReport(workFolder, fault);
 
-                // 4. Ensure ZIP is fully written before deleting folder
+                // =======================================================
+                // 4. ZIP the working folder
+                // =======================================================
+                System.IO.Compression.ZipFile.CreateFromDirectory(workFolder, zipPath);
+
+                // =======================================================
+                // 5. Clean up the temporary folder (retry-safe)
+                // =======================================================
                 for (int i = 0; i < 10; i++)
                 {
                     try
                     {
-                        Directory.Delete(folder, true);
+                        Directory.Delete(workFolder, true);
                         break;
                     }
                     catch
                     {
-                        Thread.Sleep(50);
+                        Thread.Sleep(75);
                     }
                 }
 
-                // 5. Log on UI thread
-                Application.Current.Dispatcher.BeginInvoke(() =>
-                    Log($"Package saved: {Path.GetFileName(zipPath)}"));
+                // =======================================================
+                // 6. Store package filename back to fault object  ⭐ IMPORTANT
+                // =======================================================
+                fault.PackageFile = Path.GetFileName(zipPath);
 
-                // 6. Index
+                // =======================================================
+                // 7. Update fault index
+                // =======================================================
                 UpdateFaultIndex(new
                 {
                     id = fault.FaultId,
-                    file = Path.GetFileName(zipPath),
+                    file = fault.PackageFile,
                     fault = fault.FaultCode,
                     timestamp = fault.Timestamp,
                     app = AppInfo.ApplicationName
                 });
 
-                return Path.GetFileName(zipPath);
+                // =======================================================
+                // 8. UI Log
+                // =======================================================
+                Application.Current.Dispatcher.BeginInvoke(() =>
+                    Log($"Package saved: {fault.PackageFile}"));
+
+                return fault.PackageFile;
             }
             catch (Exception ex)
             {
                 Application.Current.Dispatcher.BeginInvoke(() =>
                     Log("GeneratePackage ERROR: " + ex.Message));
+
                 return "ERROR";
             }
         }
+
 
 
         // ============================================================

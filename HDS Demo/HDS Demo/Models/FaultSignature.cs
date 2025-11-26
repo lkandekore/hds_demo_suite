@@ -20,6 +20,7 @@ namespace HDS_Demo.Models
         [JsonIgnore] public string TypeDescription { get; set; } = string.Empty;
         [JsonIgnore] public int Count { get; set; } = 1;
         [JsonIgnore] public DateTime LastTimestamp { get; set; }
-        [JsonIgnore] public FaultTimeSeries TimeSeries { get; set; } = new FaultTimeSeries();
+        public FaultTimeSeries TimeSeries { get; set; } = new FaultTimeSeries();
+        [JsonIgnore] public string PackageFile { get; set; } = string.Empty;
     }
 }
