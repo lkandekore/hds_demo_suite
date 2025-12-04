@@ -151,7 +151,7 @@ namespace Application_A
                 {
                     LogFileLocation = LogFileLocation,
                     Capture = new List<string> { "DLTLogs", "MemoryDump" },
-                    Environment = new List<string> { "CPU", "RAM", "THREADS" }
+                    Environment = new List<string> { "CPU", "RAM", "NETWORK" }
                 }
             };
         }

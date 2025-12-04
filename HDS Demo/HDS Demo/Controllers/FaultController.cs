@@ -81,6 +81,7 @@ namespace HDS_Demo.Controllers
                 .OrderByDescending(f => f.LastTimestamp)
                 .Select(f => new
                 {
+                    application = f.ApplicationName,
                     id = f.FaultId,
                     code = f.FaultCode,
                     description = f.Description,
@@ -88,9 +89,6 @@ namespace HDS_Demo.Controllers
                     type = f.Type,
                     typeDescription = f.TypeDescription,
                     timestamp = f.Timestamp,
-                    // Add these back if needed:
-                    //package = f.PackageFile,
-                    //timeseries = f.TimeSeries
                 });
 
             return Ok(new { faults = items });
@@ -107,6 +105,7 @@ namespace HDS_Demo.Controllers
 
             var result = new
             {
+                application = fault.ApplicationName,
                 id = fault.FaultId,
                 code = fault.FaultCode,
                 description = fault.Description,
@@ -115,8 +114,7 @@ namespace HDS_Demo.Controllers
                 typeDescription = fault.TypeDescription,
                 timestamp = fault.Timestamp,
                 package = fault.PackageFile,
-                timeseries = fault.TimeSeries,
-                application = fault.ApplicationName
+                timeseries = fault.TimeSeries               
             };
 
             return Ok(result);
